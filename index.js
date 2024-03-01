@@ -3,52 +3,58 @@ let image = document.getElementById("img");
 let temp = document.getElementById("temp");
 let type = document.getElementById("type");
 let input = document.getElementById("inp");
-let API_key = "6d83156e4e40ca97d0c6924b832fe00c";
+let API_key = "a9d52edc788770e64f48195c08205b16";
 
 const data = async function (search) {
   let getData = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${search}&appid=${API_key}&units=metric`
+    `https://api.openweathermap.org/data/2.5/weather?q=${search}&appid=${API_key}&units=Metric`
   );
   console.log(getData);
-  let jsonData = await getData.json();
-  console.log(jsonData);
-  console.log(jsonData.name);
 
-  if (jsonData.cod == 400) {
+  let jsondata = await getData.json();
+  console.log(jsondata);
+  console.log(jsondata.name);
+
+  if (jsondata.cod == 400) {
     alert("Please Enter Location");
-    image.src = "error1.png";
+    image.src = "./img/error1.png";
     city.innerHTML = "";
     temp.innerHTML = "";
     type.innerHTML = "";
-  }
-  if (jsonData.cod == 404) {
-    alert("Please Enter Write Location");
-    image.src = "error2.png";
+  } else if (jsondata.cod == 404) {
+    alert("Please Enter Right Location");
+    image.src = "./img/error2.png";
     city.innerHTML = search;
     temp.innerHTML = "";
     type.innerHTML = "";
+  } else {
+    city.innerHTML = jsondata.name;
+    temp.innerHTML = Math.floor(jsondata.main.temp) + "°C";
+    type.innerHTML = jsondata.weather[0].main;
   }
-  city.innerHTML = search;
-  temp.innerHTML = Math.floor(jsonData.main.temp) + "°C";
-  type.innerHTML = jsonData.weather[0].main;
 
   if (type.innerHTML == "Clouds") {
-    image.src = "Clouds.png";
+    image.src = "./img/clouds.png";
   } else if (type.innerHTML == "Clear") {
-    image.src = "clears.png";
+    image.src = "./img/clears.png";
   } else if (type.innerHTML == "Rain") {
-    image.src = "rain.png";
+    image.src = "./img/rain.png";
   } else if (type.innerHTML == "Snow") {
-    image.src = "rain.png";
+    image.src = "./img/snow.png";
+  } else if (type.innerHTML == "Mist") {
+    image.src = "./img/clears.png";
   } else if (type.innerHTML == "Haze") {
-    image.src = "haze.png";
-  } else if (type.innerHTML == "Strom") {
-    image.src = "strom.png";
+    image.src = "./img/haze.png";
+  } else if (type.innerHTML == "Storm") {
+    image.src = "./img/strom.png";
+  } else if (type.innerHTML == "Smoke") {
+    image.src = "./img/haze.png";
   }
+
   input.value = "";
 };
 
 function myFun() {
-  search = input.value;
+  let search = input.value;
   data(search);
 }
